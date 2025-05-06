@@ -1,9 +1,8 @@
 import FormModel from "./formModel.js";
 
-/**
- * Create and save a new form entry
- */
-export const submitForm = async (req, res) => {
+// @desc    submit form data
+// @route   POST /api/form
+const submitFormData = async (req, res) => {
   try {
     const { name, surname, idNumber, dateOfBirth } = req.body;
 
@@ -22,3 +21,5 @@ export const submitForm = async (req, res) => {
       .json({ error: "An error occurred while submitting the form" });
   }
 };
+
+export { submitFormData };
