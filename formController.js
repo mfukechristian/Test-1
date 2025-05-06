@@ -4,8 +4,10 @@ import FormModel from "./formModel.js";
 // @route   POST /api/form
 const submitFormData = async (req, res) => {
   try {
+    // Destructure the form data from the request body
     const { name, surname, idNumber, dateOfBirth } = req.body;
 
+    // Create a new form entry
     const newForm = new FormModel({
       name,
       surname,
@@ -13,12 +15,20 @@ const submitFormData = async (req, res) => {
       dateOfBirth,
     });
 
+    // Save the form data to MongoDB
     await newForm.save();
-    res.status(201).json({ message: "Form submitted successfully" });
+
+    // Send success response with Node.js http module (not Express)
+    res.writeHead(201, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Form submitted successfully" }));
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while submitting the form" });
+    console.error("Form submission error:", error);
+
+    // Handle errors by sending error response
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({ error: "An error occurred while submitting the form" })
+    );
   }
 };
 

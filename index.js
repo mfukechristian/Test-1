@@ -1,24 +1,34 @@
-import http from "http";
-import dotenv from "dotenv";
-import connectDB from "./config.js";
-import { submitFormData } from "./formController.js";
+const form = document.getElementById("form");
 
-dotenv.config();
-connectDB();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/api/form" && req.method == "POST") {
-    submitFormData(req, res);
-  } else {
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(
-      JSON.stringify({
-        message: "Route Not Found",
-      })
-    );
+  const data = {
+    name: document.getElementById("name").value,
+    surname: document.getElementById("surname").value,
+    idNumber: document.getElementById("idnumber").value, // Make sure this matches the ID in your HTML
+    dateOfBirth: document.getElementById("dob").value,
+  };
+
+  try {
+    const res = await fetch("http://localhost:5000/api/form", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+      alert(result.message || "Form submitted.");
+      form.reset(); // Reset the form on success
+    } else {
+      const errorData = await res.json().catch(() => ({}));
+      alert("Failed to submit form: " + (errorData.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Failed to submit form. Please check your connection.");
+    console.error(err);
   }
 });
-
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
