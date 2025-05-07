@@ -65,3 +65,19 @@ button[type="reset"] {
   background-color: #f44336;
   color: white;
 }
+
+.view-records-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.view-records-link a {
+  display: inline-block;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.view-records-link a:hover {
+  text-decoration: underline;
+}

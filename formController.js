@@ -18,7 +18,7 @@ const isValidDate = (dateString) => {
   );
 };
 
-// @desc    submit form data
+// @desc    Submit form data
 // @route   POST /api/form
 const submitFormData = async (req, res) => {
   try {
@@ -90,4 +90,18 @@ const submitFormData = async (req, res) => {
   }
 };
 
-export { submitFormData };
+// @desc    Get all form records
+// @route   GET /api/form
+const getAllFormData = async (req, res) => {
+  try {
+    const forms = await FormModel.find(); // Get all documents
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(forms));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Failed to retrieve form data." }));
+  }
+};
+
+export { submitFormData, getAllFormData };

@@ -1,7 +1,7 @@
 import http from "http";
 import dotenv from "dotenv";
 import connectDB from "./config.js";
-import { submitFormData } from "./formController.js";
+import { submitFormData, getAllFormData } from "./formController.js";
 
 dotenv.config();
 connectDB();
@@ -47,6 +47,20 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Handle GET all form data
+  if (req.url === "/api/form" && req.method === "GET") {
+    try {
+      await getAllFormData(req, res);
+    } catch (error) {
+      console.error("Error handling GET request:", error);
+      if (!res.headersSent) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Server error: " + error.message }));
+      }
+    }
+    return;
+  }
+
   // Handle form submission endpoint
   if (req.url === "/api/form" && req.method === "POST") {
     try {
@@ -62,11 +76,12 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ error: "Server error: " + error.message }));
       }
     }
-  } else {
-    // Handle 404 for any other routes
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "Route Not Found" }));
+    return;
   }
+
+  // Handle 404 for any other routes
+  res.writeHead(404, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ message: "Route Not Found" }));
 });
 
 const PORT = process.env.PORT || 5000;
