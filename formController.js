@@ -18,7 +18,7 @@ const submitFormData = async (req, res) => {
     // Save the form data to MongoDB
     await newForm.save();
 
-    // Send success response with Node.js http module (not Express)
+    // Send success response
     res.writeHead(201, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Form submitted successfully" }));
   } catch (error) {
