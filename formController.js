@@ -1,11 +1,48 @@
 import FormModel from "./formModel.js";
 
+const isValidName = (name) => {
+  const regex = /^[a-zA-Z\s\-']+$/;
+  return typeof name === "string" && regex.test(name);
+};
+
+const isValidDate = (dateString) => {
+  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+  if (!regex.test(dateString)) return false;
+
+  const [day, month, year] = dateString.split("/").map(Number);
+  const date = new Date(year, month - 1, day);
+  return (
+    date.getDate() === day &&
+    date.getMonth() === month - 1 &&
+    date.getFullYear() === year
+  );
+};
+
 // @desc    submit form data
 // @route   POST /api/form
 const submitFormData = async (req, res) => {
   try {
-    // Destructure the form data from the request body
     const { name, surname, idNumber, dateOfBirth } = req.body;
+
+    if (!name || !isValidName(name)) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({
+          error:
+            "Name is required and must contain only letters, spaces, hyphens (-), or apostrophes (').",
+        })
+      );
+    }
+
+    if (!surname || !isValidName(surname)) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({
+          error:
+            "Surname is required and must contain only letters, spaces, hyphens (-), or apostrophes (').",
+        })
+      );
+    }
 
     if (typeof idNumber !== "number" || idNumber.toString().length !== 13) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -16,7 +53,16 @@ const submitFormData = async (req, res) => {
       );
     }
 
-    // Create a new form entry
+    if (!dateOfBirth || !isValidDate(dateOfBirth)) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({
+          error:
+            "Date of birth must be in dd/mm/yyyy format and represent a valid date.",
+        })
+      );
+    }
+
     const newForm = new FormModel({
       name,
       surname,
@@ -24,10 +70,8 @@ const submitFormData = async (req, res) => {
       dateOfBirth,
     });
 
-    // Save the form data to MongoDB
     await newForm.save();
 
-    // Send success response
     res.writeHead(201, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Form submitted successfully" }));
   } catch (error) {
