@@ -6,7 +6,7 @@ form.addEventListener("submit", async (e) => {
   const data = {
     name: document.getElementById("name").value,
     surname: document.getElementById("surname").value,
-    idNumber: document.getElementById("idnumber").value, // Make sure this matches the ID in your HTML
+    idNumber: Number(document.getElementById("idnumber").value),
     dateOfBirth: document.getElementById("dob").value,
   };
 

@@ -10,9 +10,11 @@ const formSchema = new mongoose.Schema({
     required: true,
   },
   idNumber: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
+    validate: { validator: (value) => value.toString().length === 13 },
+    message: (props) => `${props.value}`,
   },
   dateOfBirth: {
     type: Date,
