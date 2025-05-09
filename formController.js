@@ -63,11 +63,15 @@ const submitFormData = async (req, res) => {
       );
     }
 
+    // Parse dateOfBirth string to Date object
+    const [day, month, year] = dateOfBirth.split("/").map(Number);
+    const parsedDateOfBirth = new Date(year, month - 1, day); // month is 0-indexed
+
     const newForm = new FormModel({
       name,
       surname,
       idNumber,
-      dateOfBirth,
+      dateOfBirth: parsedDateOfBirth, // Use the parsed Date object
     });
 
     await newForm.save();
