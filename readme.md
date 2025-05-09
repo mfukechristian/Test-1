@@ -74,7 +74,7 @@ project-folder/
    Create a `.env` file at the root:
 
    ```
-   MONGO_URI=mongodb://localhost:27017/formDB
+   MONGO_URI=
    PORT=5000
    ```
 
