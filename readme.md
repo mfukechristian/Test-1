@@ -1,11 +1,7 @@
-### ✅ Here's a **clean and professional `README.md`** file you can use for your project submission:
-
 ---
-
 # 📝 Test 1: HTML Form with MongoDB Data Capture
 
 This is a **full-stack JavaScript application** built to meet the requirements of **Test 1**, which involves capturing user data via an HTML form and storing it in a MongoDB database.
-
 ---
 
 ## 🧾 Project Overview
